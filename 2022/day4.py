@@ -21,11 +21,16 @@ def has_full_overlap(pair):
 
     return range1[1] >= range2[1]
 
+def has_overlap(pair):
+    return True
 
 def part1(pairs):
     return len(list(filter(has_full_overlap, pairs)))
 
+def part2(pairs):
+    return len(list(filter(has_overlap, pairs)))
 
 with open("day4.in", "r") as reader:
     pairs = parse(reader.read())
     print(part1(pairs))
+    print(part2(pairs))
