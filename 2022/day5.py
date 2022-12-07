@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import copy
 
 
 def parse(buffer):
@@ -40,20 +41,24 @@ def parse_moves(lines):
 
 
 def part1(crates, moves):
+    crates_copy = copy.deepcopy(crates)
     for move in moves:
-        # print(move)
-        # print(crates[move.from_crate], crates[move.to_crate])
-        crates[move.to_crate].extend(reversed(crates[move.from_crate][-move.count :]))
-        crates[move.from_crate] = crates[move.from_crate][: -move.count]
-        # print(crates[move.from_crate], crates[move.to_crate])
-    # print(crates)
-    return "".join([crate[-1] for crate in crates if len(crate) > 0])
+        crates_copy[move.to_crate].extend(
+            reversed(crates_copy[move.from_crate][-move.count :])
+        )
+        crates_copy[move.from_crate] = crates_copy[move.from_crate][: -move.count]
+    return "".join([crate[-1] for crate in crates_copy if len(crate) > 0])
 
 
-# def part2(pairs):
+def part2(crates, moves):
+    crates_copy = copy.deepcopy(crates)
+    for move in moves:
+        crates_copy[move.to_crate].extend(crates_copy[move.from_crate][-move.count :])
+        crates_copy[move.from_crate] = crates_copy[move.from_crate][: -move.count]
+    return "".join([crate[-1] for crate in crates_copy if len(crate) > 0])
 
 
 with open("day5.in", "r") as reader:
     crates, moves = parse(reader.read())
     print(part1(crates, moves))
-    # print(part2(pairs))
+    print(part2(crates, moves))
