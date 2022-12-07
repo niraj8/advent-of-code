@@ -5,23 +5,24 @@ def parse(buffer):
 
 def part1(lines):
     for line in lines:
-        print(end_index_4_consecutive_uniq_chars(line))
+        print(end_index_n_consecutive_uniq_chars(line, 4))
 
 
-def end_index_4_consecutive_uniq_chars(s):
+def end_index_n_consecutive_uniq_chars(s, n):
     i = 0
     while i < len(s) - 3:
-        if len(set(s[i : i + 4])) == 4:
-            return i + 4
+        if len(set(s[i : i + n])) == n:
+            return i + n
         else:
             i += 1
 
 
-def part2():
-    return True
+def part2(lines):
+    for line in lines:
+        print(end_index_n_consecutive_uniq_chars(line, 14))
 
 
 with open("day6.in", "r") as reader:
     lines = parse(reader.read())
     part1(lines)
-    # print(part2(crates, moves))
+    part2(lines)
