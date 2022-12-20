@@ -43,8 +43,7 @@ def parse_input(buffer):
     return commands_and_outputs
 
 
-def part1(commands):
-    directory_tree = parse_directory_tree(commands)
+def part1(directory_tree):
     directory_size(directory_tree, "/")
     return sum([v for (k, v) in directory_sizes_dict.items() if v <= 1_00_000])
 
@@ -105,15 +104,19 @@ def directory_size(directory, current_path):
     return dirs_size + files_size
 
 
-def part2(commands):
-    return commands
+def part2():
+    total_memory = 70_000_000
+    memory_needed_for_update = 30_000_000
+    used_memory = directory_sizes_dict["/"]
+    min_memory_to_be_freed = memory_needed_for_update - (total_memory - used_memory)
+    for i in filter(lambda path: directory_sizes_dict[path] >= min_memory_to_be_freed, directory_sizes_dict):
+        print(i, directory_sizes_dict[i])
 
 
 with open("day7.in", "r") as reader:
     parsed_input = parse_input(reader.read())
-    print(part1(parsed_input))
-
-    # part2(lines)
+    print(part1(parse_directory_tree(parsed_input)))
+    part2()
 
 assert ls(CommandAndOutput("ls", ["584 i"])) == ([], [File("i", 584)])
 assert ls(CommandAndOutput("ls", ["dir e", "584 i"])) == ([Directory("e", [], [])], [File("i", 584)])
