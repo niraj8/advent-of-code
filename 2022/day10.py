@@ -41,20 +41,38 @@ def parse_input(buffer):
     return [parse_signal(line) for line in buffer.split("\n")]
 
 
+def generate_initial_screen():
+    pixel_rows = []
+    for row in range(6):
+        pixel_row = []
+        for pixel in range(40):
+            pixel_row.append('.')
+        pixel_rows.append(pixel_row)
+    return pixel_rows
+
+
 with open("day10.in", "r") as reader:
     signals = parse_input(reader.read())
     register = 1
     cycles = 0
     signal_strength_sum = 0
-    # print(signal_list)
+    screen = generate_initial_screen()
+
     for signal in signals:
         for cycle in range(1, signal.cycles + 1):
             cycles += 1
             # print(cycles, signal, register)
+            row_index = int((cycles - 1) / 40)
+            pixel_index = (cycles - 1) % 40
+
+            if pixel_index == register or register - 1 == pixel_index or register + 1 == pixel_index:
+                screen[row_index][pixel_index] = '#'
             signal_strength = cycles * register
             if cycles % 40 == 20:
                 signal_strength_sum += signal_strength
             if cycle == signal.cycles:
                 register = signal.run(register)
-    print(signal_strength_sum)
 
+    print(signal_strength_sum)
+    for line in screen:
+        print(''.join(line))
