@@ -38,7 +38,22 @@ func main() {
 	slices.Sort(listA)
 	slices.Sort(listB)
 	calculateDistance(listA, listB)
+	similarityScore(listA, listB)
 
+}
+
+func similarityScore(left []int, right []int) {
+	score := 0
+	for _, locationID1 := range left {
+		count := 0
+		for _, locationID2 := range right {
+			if locationID1 == locationID2 {
+				count += 1
+			}
+		}
+		score += locationID1 * count
+	}
+	log.Println("similarity score:", score)
 }
 
 func calculateDistance(listA []int, listB []int) {
