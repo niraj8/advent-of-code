@@ -39,14 +39,24 @@ func main() {
 		reports[j] = levels
 	}
 
-	safeReportCount(reports)
+	safeReportCount(reports, false)
+	safeReportCount(reports, true)
 }
 
-func safeReportCount(reports [][]int) {
+func safeReportCount(reports [][]int, dampener bool) {
 	count := 0
 
 	for _, report := range reports {
-		if safeReport(report) {
+		if dampener && !safeReport(report) {
+			for i := range len(report) {
+				if safeReport(removeIndex(report, i)) {
+					// log.Print("count +1")
+					count += 1
+					break
+				}
+			}
+		} else if safeReport(report) {
+			// log.Print("count +1")
 			count += 1
 		}
 	}
@@ -54,6 +64,7 @@ func safeReportCount(reports [][]int) {
 }
 
 func safeReport(report []int) bool {
+	// log.Print(report)
 	var goesUpOrDown int = cmp.Compare(report[1], report[0])
 	var diff int = abs(report[1] - report[0])
 
@@ -69,6 +80,12 @@ func safeReport(report []int) bool {
 		}
 	}
 	return true
+}
+
+func removeIndex(s []int, index int) []int {
+	ret := make([]int, 0)
+	ret = append(ret, s[:index]...)
+	return append(ret, s[index+1:]...)
 }
 
 func abs(num int) int {
