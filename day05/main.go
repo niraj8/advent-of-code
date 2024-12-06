@@ -46,22 +46,34 @@ func main() {
 	// log.Print(rules)
 	// log.Print(updates)
 
-	part1(rules, updates)
-}
-
-func part1(rules, updates [][]int) {
-	result := 0
 	rulesMap := make(map[int][]int, 0)
 	for _, rule := range rules {
 		rulesMap[rule[0]] = append(rulesMap[rule[0]], rule[1])
 	}
+
+	log.Print("part1: ", part1(rulesMap, updates))
+	log.Print("part2: ", part2(rulesMap, updates))
+}
+
+func part2(rulesMap map[int][]int, updates [][]int) int {
+	result := 0
+	for _, update := range updates {
+		if !isUpdateCorrectlyOrdered(update, rulesMap) {
+			// TODO fix order
+		}
+	}
+	return result
+}
+
+func part1(rulesMap map[int][]int, updates [][]int) int {
+	result := 0
 	// log.Print(rulesMap)
 	for _, update := range updates {
 		if isUpdateCorrectlyOrdered(update, rulesMap) {
 			result += update[len(update)/2]
 		}
 	}
-	log.Print(result)
+	return result
 }
 
 func isUpdateCorrectlyOrdered(update []int, rulesMap map[int][]int) bool {
